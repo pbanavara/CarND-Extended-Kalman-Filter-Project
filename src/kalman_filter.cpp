@@ -56,21 +56,21 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   TODO:
     * update the state by using Extended Kalman Filter equations
   */
-  double px = x_[0];
-  double py = x_[1];
-  double px_1  = x_[2];
-  double py_1  = x_[3];
+  float px = x_[0];
+  float py = x_[1];
+  float px_1  = x_[2];
+  float py_1  = x_[3];
   //Check for division by zero
-  double eps = 0.000001;  // Make sure we don't divide by 0.
+  float eps = 0.000001;  // Make sure we don't divide by 0.
   if (fabs(px) < eps && fabs(py) < eps) {
     px = eps;
     py = eps;
   } else if (fabs(px) < eps) {
      px = eps;
   }
-  double ro = sqrt(px * px + py * py);
-  double phi = atan2(py, px);
-  double ro_dot = (px * px_1 + py * py_1) / ro;
+  float ro = sqrt(px * px + py * py);
+  float phi = atan2(py, px);
+  float ro_dot = (px * px_1 + py * py_1) / ro;
   VectorXd hx(3);
   hx << ro, phi, ro_dot;
   VectorXd y = z - hx;
