@@ -58,8 +58,8 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   */
   float px = x_[0];
   float py = x_[1];
-  float px_1  = x_[2];
-  float py_1  = x_[3];
+  float vx  = x_[2];
+  float vy  = x_[3];
   //Check for division by zero
   float eps = 0.000001;  // Make sure we don't divide by 0.
   if (fabs(px) < eps && fabs(py) < eps) {
@@ -70,7 +70,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   }
   float ro = sqrt(px * px + py * py);
   float phi = atan2(py, px);
-  float ro_dot = (px * px_1 + py * py_1) / ro;
+  float ro_dot = (px * vx + py * vy) / ro;
   VectorXd hx(3);
   hx << ro, phi, ro_dot;
   VectorXd y = z - hx;
@@ -90,12 +90,4 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   long x_size = x_.size();
   MatrixXd I = MatrixXd::Identity(x_size, x_size);
   P_ = (I - K * H_) * P_;
-  /*
-  while (y[1]>M_PI) {
-    y(1) -= 2 * M_PI;
-  }
-  while (y[1]<-M_PI) {
-    y(1) += 2 * M_PI;
-  }
-  */
 }
